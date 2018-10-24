@@ -1,8 +1,11 @@
-apiVersion: apps/v1
+apiVersion: apps/v1 # for versions before 1.9.0 use apps/v1beta2
 kind: Deployment
 metadata:
   name: testapp
 spec:
+  selector:
+    matchLabels:
+      app: testapp
   replicas: 2
   template:
     metadata:
@@ -10,7 +13,7 @@ spec:
         app: testapp
     spec:
       containers:
-        - name: testapp
-          image: kv1995/testapp:v1
-          ports:
-             - containerPort: 8080
+      - name: testapp
+        image: kv1995/testapp:latest # Update the version of nginx from 1.7.9 to 1.8
+        ports:
+        - containerPort: 80
