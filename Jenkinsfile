@@ -5,6 +5,7 @@ pipeline {
     agent {dockerfile true} 
     steps {
       echo 'Deploying in DEV Environment'
+      sh 'java -jar /Javaapp/target/spring-boot-web-0.0.2-SNAPSHOT.jar'
       input('Do you want to Continue the pipeline to QA ?')
    }
   }
