@@ -1,6 +1,5 @@
 node {
   stage('DEV') { 
-    steps {
         sh 'docker login --username kv1995 --password Karanverma9515@'
 	sh ("docker build -t kv1995/testapp:v1 .")
         sh ("docker push kv1995/testapp:v1")
@@ -10,4 +9,3 @@ node {
         input('Do you want to Continue the pipeline to QA ?')
    }
   }
-}
