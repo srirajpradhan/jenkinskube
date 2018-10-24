@@ -2,7 +2,12 @@ pipeline {
  agent none
  stages {
   stage('DEV') {
-    agent {dockerfile true} 
+    agent {
+          docker {
+            image 'kv1995/kubejenkins:v1'
+            args '-p 9669:8080'
+            }
+          } 
     steps {
       echo 'Deploying in DEV Environment'
       sh 'java -jar /Javaapp/target/spring-boot-web-0.0.2-SNAPSHOT.jar'
@@ -11,9 +16,15 @@ pipeline {
   }
 
   stage('QA') {
-    agent {dockerfile true}   
+    agent {
+           docker {
+            image 'kv1995/kubejenkins:v1'
+            args '-p 9669:8080'
+            }
+           }   
     steps { 
       echo 'Deploying in QA' 
+      sh 'java -jar /Javaapp/target/spring-boot-web-0.0.2-SNAPSHOT.jar'
    }
   }
 
