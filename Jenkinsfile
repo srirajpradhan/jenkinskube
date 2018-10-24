@@ -10,7 +10,7 @@ pipeline {
           } 
     steps {
       echo 'Deploying in DEV Environment'
-      sh 'java -jar /Javaapp/target/spring-boot-web-0.0.2-SNAPSHOT.jar'
+      sh 'java -jar /Javaapp/target/spring-boot-web-0.0.2-SNAPSHOT.jar &'
       input('Do you want to Continue the pipeline to QA ?')
    }
   }
@@ -24,7 +24,7 @@ pipeline {
            }   
     steps { 
       echo 'Deploying in QA' 
-      sh 'java -jar /Javaapp/target/spring-boot-web-0.0.2-SNAPSHOT.jar'
+      sh 'java -jar /Javaapp/target/spring-boot-web-0.0.2-SNAPSHOT.jar &'
    }
   }
 
