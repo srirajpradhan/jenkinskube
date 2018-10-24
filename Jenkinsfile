@@ -1,6 +1,4 @@
-pipeline {
- agent none
- stages {
+node {
   stage('DEV') { 
     steps {
         sh 'docker login --username kv1995 --password Karanverma9515@'
@@ -12,5 +10,4 @@ pipeline {
         input('Do you want to Continue the pipeline to QA ?')
    }
   }
- }
 }
