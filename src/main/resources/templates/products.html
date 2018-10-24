@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head lang="en">
+
+    <title>Contact MS</title>
+
+    <!--/*/ <th:block th:include="fragments/headerinc :: head"></th:block> /*/-->
+</head>
+<body>
+<div class="container">
+    <!--/*/ <th:block th:include="fragments/header :: header"></th:block> /*/-->
+    
+    <div class="jumbotron"  style="height:250px">
+            <div class="row text-center">
+                <div class="">
+                    <h2>Contact Management System</h2>
+                    <h3>@Relevance lab</h3>
+                </div>
+            </div>
+            <div class="row text-center">
+                <img src="../../static/images/boot.png" width="50" height="50" th:src="@{/images/boot3.png}"/>
+            </div>
+        </div>
+    
+    <div th:if="${not #lists.isEmpty(products)}">
+        <center><h2>CONTACT LIST</h2></center>
+        <table class="table table-striped">
+            <tr>
+                <th style="display:none">Id</th>
+                <th style="display:none">Contact Id</th>
+                <th>Name</th>
+                <th>Phone no</th>
+                <th>View</th>
+                <th>Edit</th>
+                <th>Delete</th>
+            </tr>
+            <tr th:each="product : ${products}">
+                <td th:text="${product.id}" style="display:none" ><a href="/product/${product.id}">Id</a></td>
+                <td th:text="${product.productId}" style="display:none">Product Id</td>
+                <td th:text="${product.name}">descirption</td>
+                <td th:text="${product.price}">price</td>
+                <td><a th:href="${ '/product/' + product.id}">View</a></td>
+                <td><a th:href="${'/product/edit/' + product.id}">Edit</a></td>
+                <td><a th:href="${'/product/delete/' + product.id}">Delete</a></td>
+            </tr>
+        </table>
+
+    </div>
+</div>
+
+</body>
+</html>
