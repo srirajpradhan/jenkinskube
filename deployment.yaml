@@ -1,0 +1,16 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: testapp
+spec:
+  template:
+    metadata:
+      labels:
+        app: testapp
+    spec:
+      containers:
+      - name: testapp
+        image: kv1995/testapp:v1
+        imagePullPolicy: IfNotPresent
+        ports:
+- containerPort: 8080
