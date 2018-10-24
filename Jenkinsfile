@@ -4,7 +4,7 @@ node {
 	sh ("docker build -t kv1995/testapp:v1 .")
         sh ("docker push kv1995/testapp")
         sh 'kubectl delete deployments testapp || true' 
-        sh 'kubectl create -f /home/ubuntu/relevancelab/deployment.yaml --port=8080'
+        sh 'kubectl create -f /home/ubuntu/relevancelab/deployment.yaml'
         sh 'kubectl expose deployment testapp --type=LoadBalancer'
         input('Do you want to Continue the pipeline to QA ?')
    }
