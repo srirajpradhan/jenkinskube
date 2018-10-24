@@ -2,11 +2,7 @@ pipeline {
  agent none
  stages {
   stage('DEV') {
-    agent {
-            docker { 
-                  image 'kv1995/kubejenkins:v1'
-                 }
-          }
+    agent {dockerfile true} 
     steps {
       echo 'Deploying in DEV Environment'
       input('Do you want to Continue the pipeline to QA ?')
@@ -14,11 +10,7 @@ pipeline {
   }
 
   stage('QA') {
-    agent {
-            docker { 
-                  image 'kv1995/kubejenkins:v1' 
-                 }
-          } 
+    agent {dockerfile true}   
     steps { 
       echo 'Deploying in QA' 
    }
