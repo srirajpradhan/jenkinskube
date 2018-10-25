@@ -1,6 +1,5 @@
 node {
   stage('DEV') { 
-        sh 'docker login --username kv1995 --password Karanverma9515@'
 	sh ("docker build -t kv1995/testapp:latest .")
         sh ("docker push kv1995/testapp:latest")
         sh 'kubectl delete deployment testapp || true'
