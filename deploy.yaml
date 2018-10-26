@@ -13,4 +13,4 @@ apiVersion: extensions/v1beta1
          - name: testapp
            image: kv1995/testapp:0.1
            ports:
-             - containerPort: 80
+             - containerPort: 8080
