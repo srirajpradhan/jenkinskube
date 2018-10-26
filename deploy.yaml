@@ -13,7 +13,7 @@ spec:
         app: testapp
     spec:
       containers:
-      - name: nginx
+      - name: testapp
         image: kv1995/testapp:0.1
         ports:
         - containerPort: 80
