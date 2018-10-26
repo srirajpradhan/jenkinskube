@@ -4,7 +4,7 @@ node {
 	sh ("docker build -t kv1995/testapp:latest ./jenkinskube/")
         sh ("docker push kv1995/testapp:latest")
         sh 'kubectl delete deployment testapp || true'
-        sh 'kubectl run hellonode --image=kv1995/testapp:latest'
+        sh 'kubectl run hellonode --generator=deployment/v1beta1 --image=kv1995/testapp:latest'
         sh 'kubectl expose deployment testapp --type=LoadBalancer'
         input('Do you want to Continue the pipeline to QA ?')
    }
