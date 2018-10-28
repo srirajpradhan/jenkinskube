@@ -17,11 +17,9 @@ pipeline {
         }
         stage('Push Docker Image') {
             steps {
-                script {
-                    docker.withRegistry('https://registry.hub.docker.com', 'DOCKER_HUB_LOGIN') {
-                        app.push("${env.BUILD_NUMBER}")
-                        app.push("latest")
-                    }
+                 sh ("docker login --username kv1995 --password Karanverma9515@)
+                 sh ("docker push("${env.BUILD_NUMBER}")
+                 sh ("docker push ("latest"))
                 }
             }
         }
