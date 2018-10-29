@@ -1,36 +1,49 @@
-kind: Service
 apiVersion: v1
+kind: Service
 metadata:
-  name: train-schedule-service
+  creationTimestamp: 2018-10-29T07:08:21Z
+  labels:
+    run: test
+  name: test
+  namespace: default
+  resourceVersion: "11794"
+  selfLink: /api/v1/namespaces/default/services/test
+  uid: 6b2a8958-db49-11e8-a5cc-067091cab57a
 spec:
-  type: NodePort
-  selector:
-    app: train-schedule
+  clusterIP: 10.107.116.162
+  externalTrafficPolicy: Cluster
   ports:
-  - protocol: TCP
-    port: 32245
-    nodePort: 32245
+  - nodePort: 30902
+    port: 8080
+    protocol: TCP
+    targetPort: 8080
+  selector:
+    run: test
+  sessionAffinity: None
+  type: LoadBalancer
+status:
+  loadBalancer: {}
 
 ---
 
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  name: train-schedule-deployment
+  name: test
   labels:
-    app: train-schedule
+    app: test
 spec:
   replicas: 2
   selector:
     matchLabels:
-      app: train-schedule
+      app: test
   template:
     metadata:
       labels:
-        app: train-schedule
+        app: test
     spec:
       containers:
-      - name: train-schedule
+      - name: test
         image: $DOCKER_IMAGE_NAME:$BUILD_NUMBER
         ports:
-        - containerPort: 9669
+        - containerPort: 8080
