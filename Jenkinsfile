@@ -26,7 +26,7 @@ pipeline {
         }
         stage('DeployToProduction') {
             steps {
-                input 'Deploy to Development Environment?'
+                input 'Deploy to Dev Environment?'
                 milestone(1)
                 kubernetesDeploy(
                     credentialsType: 'KubeConfig',
