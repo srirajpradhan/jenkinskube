@@ -1,4 +1,5 @@
 kind: Service
+apiVersion: v1
 metadata:
   name: test
 spec:
@@ -8,7 +9,7 @@ spec:
     protocol: TCP
     targetPort: 8080
   selector:
-    run: test
+    app: test
   type: LoadBalancer
 
 ---
