@@ -1,17 +1,7 @@
-apiVersion: v1
 kind: Service
 metadata:
-  creationTimestamp: 2018-10-29T07:08:21Z
-  labels:
-    run: test
   name: test
-  namespace: default
-  resourceVersion: "11794"
-  selfLink: /api/v1/namespaces/default/services/test
-  uid: 6b2a8958-db49-11e8-a5cc-067091cab57a
 spec:
-  clusterIP: 10.107.116.162
-  externalTrafficPolicy: Cluster
   ports:
   - nodePort: 30902
     port: 8080
@@ -19,10 +9,7 @@ spec:
     targetPort: 8080
   selector:
     run: test
-  sessionAffinity: None
   type: LoadBalancer
-status:
-  loadBalancer: {}
 
 ---
 
