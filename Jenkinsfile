@@ -1,7 +1,7 @@
 pipeline {
     agent any
     environment {
-        DOCKER_IMAGE_NAME = "kv1995/train-schedule"
+        DOCKER_IMAGE_NAME = "srirajpradhan/jenkinskube"
     }
     stages {
         stage('Install Kubernetes') {
@@ -54,7 +54,6 @@ pipeline {
                 script {
                     docker.withRegistry('https://registry.hub.docker.com', 'docker_hub_login') {
                         app.push("${env.BUILD_NUMBER}")
-                        app.push("latest")
                        }
                 }
             }
