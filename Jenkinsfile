@@ -112,6 +112,8 @@ pipeline {
               }
               catch(err) {
                   echo 'Rollback not Selected'
+                  currentBuild.result = 'SUCCESS'
+                  return
               }
             }
           }
