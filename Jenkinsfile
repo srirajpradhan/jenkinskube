@@ -35,7 +35,7 @@ pipeline {
                  sudo kubectl taint nodes --all node-role.kubernetes.io/master- && \
                  git clone https://github.com/kubernetes/kube-state-metrics.git && \
                  cd kube-state-metrics && \
-                 sudo kubectl apply -f kubernetes
+                 sudo kubectl apply -f kubernetes && \
                  sudo kubectl apply -f https://docs.projectcalico.org/v3.1/getting-started/kubernetes/installation/hosted/rbac-kdd.yaml && \
                  sudo kubectl apply -f https://docs.projectcalico.org/v3.1/getting-started/kubernetes/installation/hosted/kubernetes-datastore/calico-networking/1.7/calico.yaml && \
                  sudo kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/master/src/deploy/alternative/kubernetes-dashboard.yaml && \
