@@ -8,7 +8,7 @@ pipeline {
           steps {
               script {
                 env.ALLOW = false
-                env.CHOICE = input message: 'Enter the Choice', ok: 'Release!',
+                env.CHOICE = input message: 'Enter the Choice', ok: 'Proceed!',
                       parameters: [choice(name: 'CHOICE', choices: 'Provision\nDeploy\nRollback',
                                    description: 'Enter Choice to traverse?')]
               }
@@ -16,13 +16,12 @@ pipeline {
           }
         }
         stage('Install Kubernetes') {
-         steps {
-           when {
+          when {
             expression {
               return env.CHOICE == 'Provision';
             }
-           }
-
+          }
+          steps {
            script {
             env.SUBNETIP = input(id: 'env.SUBNETIP', message: 'Enter Subent IP', parameters: [[$class: 'TextParameterDefinition', defaultValue: 'latest', description: 'Environment', name: 'env']])
             sh 'sudo apt update &&\
