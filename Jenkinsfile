@@ -65,7 +65,9 @@ pipeline {
             steps {
                echo 'Ayo!!!!!!!!!!!!!!!!!!!!!!!'
                input('Configure Kubernetes Dashboard?')
-               env.ALLOW = true
+               script {
+                    env.ALLOW = true
+               }
             }
         }
         
