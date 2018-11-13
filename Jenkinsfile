@@ -34,7 +34,7 @@ pipeline {
                  sudo kubeadm init --pod-network-cidr=' + env.SUBNETIP + ' && \
                  sudo mkdir -p /home/ubuntu/.kube && \
                  sudo cp -i /etc/kubernetes/admin.conf /home/ubuntu/.kube/config && \
-                 sudo chown $(id -u):$(id -g) /home/ubuntu/.kube/config && \
+                 sudo chown ubuntu:ubuntu /home/ubuntu/.kube/config && \
                  sudo cp -R /home/ubuntu/.kube/ /var/lib/jenkins && \
                  sudo chown -R jenkins:jenkins /var/lib/jenkins/.kube/ &&\
                  sudo usermod -aG docker jenkins && \
