@@ -23,22 +23,23 @@ pipeline {
           }
           steps {
            script {
-            env.SUBNETIP = input(id: 'env.SUBNETIP', message: 'Enter Subent IP', parameters: [[$class: 'TextParameterDefinition', defaultValue: 'latest', description: 'Environment', name: 'env']])
-            sh "sudo apt update &&\
-                sudo apt install -y apt-transport-https ca-certificates curl software-properties-common &&\
+            env.SUBNETIP = input(id: 'env.SUBNETIP', message: 'Enter Subent IP', parameters: [[$class: 'TextParameterDefinition', defaultValue: '172.31.32.0/20
+', description: 'Environment', name: 'env']])
+            sh ' sudo apt update &&\
+                 sudo apt install -y apt-transport-https ca-certificates curl software-properties-common &&\
                  sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add - &&\
-                 sudo add-apt-repository 'deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable' &&\
+                 sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" &&\
                  sudo apt update &&\
                  sudo apt install -y docker-ce=18.06.1~ce~3-0~ubuntu &&\
                  sudo curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add - &&\
-                 echo 'deb http://apt.kubernetes.io/ kubernetes-xenial main' | sudo tee /etc/apt/sources.list.d/kubernetes.list && \
+                 echo "deb http://apt.kubernetes.io/ kubernetes-xenial main" | sudo tee /etc/apt/sources.list.d/kubernetes.list && \
                  sudo apt-get update && \
                  sudo apt-get install -y kubelet kubeadm kubectl &&\
-                 sudo sed -i 's/cgroup-driver=systemd/cgroup-driver=cgroupfs/g' /etc/systemd/system/kubelet.service.d/10-kubeadm.conf &&\
+                 sudo sed -i "s/cgroup-driver=systemd/cgroup-driver=cgroupfs/g" /etc/systemd/system/kubelet.service.d/10-kubeadm.conf &&\
                  sudo systemctl daemon-reload && \
                  sudo systemctl restart kubelet && \
                  sudo swapoff -a &&\
-                 sudo kubeadm init --pod-network-cidr=${env.SUBNETIP} && \
+                 sudo kubeadm init --pod-network-cidr="${env.SUBNETIP}" && \
                  sudo mkdir -p /home/ubuntu/.kube && \
                  sudo cp -i /etc/kubernetes/admin.conf /home/ubuntu/.kube/config && \
                  sudo chown $(id -u):$(id -g) /home/ubuntu/.kube/config && \
@@ -52,7 +53,7 @@ pipeline {
                  sudo kubectl apply -f https://docs.projectcalico.org/v3.1/getting-started/kubernetes/installation/hosted/rbac-kdd.yaml && \
                  sudo kubectl apply -f https://docs.projectcalico.org/v3.1/getting-started/kubernetes/installation/hosted/kubernetes-datastore/calico-networking/1.7/calico.yaml && \
                  sudo kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/master/src/deploy/alternative/kubernetes-dashboard.yaml && \
-                 sudo kubectl create clusterrolebinding add-on-cluster-admin --clusterrole=cluster-admin --serviceaccount=kube-system:kubernetes-dashboard"
+                 sudo kubectl create clusterrolebinding add-on-cluster-admin --clusterrole=cluster-admin --serviceaccount=kube-system:kubernetes-dashboard'
                  env.ALLOW = true
                  input('Continue after Configuring Kubernetes Dashboard using -> sudo kubectl -n kube-system edit service kubernetes-dashboard?')
            }
