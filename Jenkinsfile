@@ -1,7 +1,7 @@
 pipeline {
     agent any
     environment {
-        DOCKER_IMAGE_NAME = "srirajpradhan19/jenkinskube"
+        DOCKER_IMAGE_NAME = "srirajpradhan19/jenkinskube'
     }
     stages {
         stage('Install Kubernetes') {
@@ -37,10 +37,10 @@ pipeline {
                  sudo kubectl apply -f https://docs.projectcalico.org/v3.1/getting-started/kubernetes/installation/hosted/kubernetes-datastore/calico-networking/1.7/calico.yaml && \
                  sudo kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/master/src/deploy/alternative/kubernetes-dashboard.yaml && \
                  sudo kubectl create clusterrolebinding add-on-cluster-admin --clusterrole=cluster-admin --serviceaccount=kube-system:kubernetes-dashboard'
-                 env.CHOICE = 'Deploy';
+                 env.CHOICE = 'Deploy'
                 }
                 catch(err) {
-                  env.CHOICE = 'Deploy';
+                  env.CHOICE = 'Deploy'
                 }
            }
          }
@@ -49,7 +49,7 @@ pipeline {
         stage('Build Docker Image') {
             when {
               expression {
-                return env.CHOICE == 'Deploy';
+                return env.CHOICE == 'Deploy'
               }
             }
             steps {
@@ -64,7 +64,7 @@ pipeline {
         stage('Push Docker Image') {
              when {
                 expression {
-                  return env.CHOICE == 'Deploy';
+                  return env.CHOICE == 'Deploy'
                 }
              }
             steps {
@@ -78,7 +78,7 @@ pipeline {
         stage('DeployToProduction') {
             when {
               expression {
-                return env.CHOICE == 'Deploy';
+                return env.CHOICE == 'Deploy'
               }
             }
             steps {
