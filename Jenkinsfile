@@ -6,8 +6,10 @@ pipeline {
     stages {
         stage('Install Kubernetes') {
          steps {
+           input('Do You Want to Provision?')
+           
            script {
-             sh 'sudo apt update &&\
+                 sh 'sudo apt update &&\
                  sudo apt install -y apt-transport-https ca-certificates curl software-properties-common &&\
                  sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add - &&\
                  sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" &&\
@@ -69,6 +71,14 @@ pipeline {
                     configs: 'train-schedule-kube.yml',
                     enableConfigSubstitution: true
                 )
+            }
+        }
+        stage('Rollback') {
+            steps {
+                input('Do you want to Rollback?')
+                script {
+                    sh 'kubectl rollout undo deployment test && kubectl rollout status deployment test'
+                }
             }
         }
     }
