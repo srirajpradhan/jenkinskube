@@ -4,13 +4,6 @@ pipeline {
         DOCKER_IMAGE_NAME = "srirajpradhan19/jenkinskube"
     }
     stages {
-        stage('Initialize') {
-          steps {      
-            script {
-                env.CHOICE = 'Provision';
-            }
-          }
-        }
         stage('Install Kubernetes') {
           steps {
            script {
@@ -89,7 +82,7 @@ pipeline {
               }
             }
             steps {
-                input 'Deploy to Dev Environment?'
+                input('Deploy to Dev Environment?')
                 milestone(1)
                 kubernetesDeploy(
                     credentialsType: 'KubeConfig',
