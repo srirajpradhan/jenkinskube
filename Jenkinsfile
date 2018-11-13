@@ -5,13 +5,14 @@ pipeline {
     }
     stages {
         stage('Choices') {
-        script {
-          env.CHOICE = input(message: 'Enter the Choice', ok: 'Proceed!',
-                parameters: [choice(name: 'CHOICE', choices: 'Provision\nDeploy\nRollback',
-                             description: 'Enter Choice to traverse?')])
-        }
-        echo "${env.CHOICE}"
-
+          steps {
+            script {
+              env.CHOICE = input(message: 'Enter the Choice', ok: 'Proceed!',
+                    parameters: [choice(name: 'CHOICE', choices: 'Provision\nDeploy\nRollback',
+                                 description: 'Enter Choice to traverse?')])
+            }
+            echo "${env.CHOICE}"
+          }
         }
         stage('Install Kubernetes') {
           steps {
