@@ -113,8 +113,8 @@ pipeline {
           }
           steps {
             script {
-              sh ' kubectl rollout undo deployment test
-              echo "Rollback Complete"
+              sh ' kubectl rollout undo deployment test && \
+              echo "Rollback Complete" && \
               kubectl rollout status deployment test'
             }
             input('Do You Want to Continue?')
