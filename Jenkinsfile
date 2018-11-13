@@ -3,13 +3,6 @@ pipeline {
     environment {
         DOCKER_IMAGE_NAME = "srirajpradhan19/jenkinskube"
     }
-    parameters {
-      choice(
-        choices: ['Provision', 'Deploy', 'Rollback'],
-        description: 'Choice?',
-        name: CHOICE
-      )
-    }
     stages {
         stage("foo") {
             steps {
