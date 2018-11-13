@@ -8,6 +8,7 @@ pipeline {
           steps {      
             script {
                 env.CHOICE = 'Provision'
+                env.SUBNETIP = '172.31.32.0/20'
             }
           }
         }
