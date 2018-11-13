@@ -35,6 +35,7 @@ pipeline {
                  sudo kubectl apply -f https://docs.projectcalico.org/v3.1/getting-started/kubernetes/installation/hosted/kubernetes-datastore/calico-networking/1.7/calico.yaml && \
                  sudo kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/master/src/deploy/alternative/kubernetes-dashboard.yaml && \
                  sudo kubectl create clusterrolebinding add-on-cluster-admin --clusterrole=cluster-admin --serviceaccount=kube-system:kubernetes-dashboard'
+                 env.SUBNETIP = input(id: 'env.SUBNETIP', message: 'Enter Subnet IP', parameters: [[$class: 'TextParameterDefinition', defaultValue: '172.31.32.0/20', description: 'Environment', name: 'env']])
                  input('Configure Kubernetes Dashboard?')
            }
          }
