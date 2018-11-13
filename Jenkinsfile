@@ -87,12 +87,12 @@ pipeline {
             }
         }
         stage('Push Docker Image') {
-            steps {
-              when {
+             when {
                 expression {
                   return env.CHOICE == 'Deploy' || env.ALLOW == true;
                 }
-              }
+             }
+            steps {
               script {
                   docker.withRegistry('https://registry.hub.docker.com', 'docker_hub_login') {
                       app.push("${env.BUILD_NUMBER}")
