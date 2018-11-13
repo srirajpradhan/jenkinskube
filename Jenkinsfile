@@ -32,7 +32,6 @@ pipeline {
                  sudo usermod -aG docker jenkins && \
                  sudo chown root:docker /var/run/docker.sock && \
                  sudo systemctl restart kubelet && \
-                 sudo systemctl restart jenkins && \
                  sudo kubectl taint nodes --all node-role.kubernetes.io/master- && \
                  sudo kubectl apply -f https://docs.projectcalico.org/v3.1/getting-started/kubernetes/installation/hosted/rbac-kdd.yaml && \
                  sudo kubectl apply -f https://docs.projectcalico.org/v3.1/getting-started/kubernetes/installation/hosted/kubernetes-datastore/calico-networking/1.7/calico.yaml && \
