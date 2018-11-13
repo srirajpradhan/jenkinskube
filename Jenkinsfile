@@ -38,7 +38,7 @@ pipeline {
                  sudo systemctl daemon-reload && \
                  sudo systemctl restart kubelet && \
                  sudo swapoff -a &&\
-                 sudo kubeadm init --pod-network-cidr=${env.SUBNETIP} && \
+                 sudo kubeadm init --pod-network-cidr="${env.SUBNETIP}" && \
                  sudo mkdir -p /home/ubuntu/.kube && \
                  sudo cp -i /etc/kubernetes/admin.conf /home/ubuntu/.kube/config && \
                  sudo chown $(id -u):$(id -g) /home/ubuntu/.kube/config && \
