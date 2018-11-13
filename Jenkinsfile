@@ -45,6 +45,7 @@ pipeline {
                  sudo chown -R jenkins:jenkins /var/lib/jenkins/.kube/ &&\
                  sudo usermod -aG docker jenkins && \
                  sudo chown root:docker /var/run/docker.sock && \
+                 sudo kubectl taint nodes --all node-role.kubernetes.io/master-
                  sudo systemctl restart kubelet && \
                  sudo systemctl restart jenkins && \
                  sudo kubectl apply -f https://docs.projectcalico.org/v3.1/getting-started/kubernetes/installation/hosted/rbac-kdd.yaml && \
