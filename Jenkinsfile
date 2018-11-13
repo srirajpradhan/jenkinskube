@@ -23,7 +23,7 @@ pipeline {
           }
           steps {
            script {
-            env.SUBNETIP = input(id: 'env.SUBNETIP', message: 'Enter Subent IP', parameters: [[$class: 'TextParameterDefinition', defaultValue: '172.31.32.0/20', description: 'Environment', name: 'env']])
+            env.SUBNETIP = input(id: 'env.SUBNETIP', message: 'Enter Subnet IP', parameters: [[$class: 'TextParameterDefinition', defaultValue: '172.31.32.0/20', description: 'Environment', name: 'env']])
             sh ' sudo apt update &&\
                  sudo apt install -y apt-transport-https ca-certificates curl software-properties-common &&\
                  sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add - &&\
@@ -52,8 +52,8 @@ pipeline {
                  sudo kubectl apply -f https://docs.projectcalico.org/v3.1/getting-started/kubernetes/installation/hosted/kubernetes-datastore/calico-networking/1.7/calico.yaml && \
                  sudo kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/master/src/deploy/alternative/kubernetes-dashboard.yaml && \
                  sudo kubectl create clusterrolebinding add-on-cluster-admin --clusterrole=cluster-admin --serviceaccount=kube-system:kubernetes-dashboard'
-                 env.ALLOW = true
            }
+           echo 'Ayo!!!!!!!!!!!!!!!!!!!!!!!'
            input('Configure Kubernetes Dashboard?')
          }
         }
