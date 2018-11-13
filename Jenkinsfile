@@ -68,14 +68,21 @@ pipeline {
         }
         stage('DeployToProduction') {
             steps {
-                input 'Deploy to Dev Environment?'
-                milestone(1)
-                kubernetesDeploy(
-                    credentialsType: 'KubeConfig',
-                    kubeConfig: [path: '/var/lib/jenkins/.kube/config'],
-                    configs: 'train-schedule-kube.yml',
-                    enableConfigSubstitution: true
-                )
+                script {
+                   try{   
+                    input 'Deploy to Dev Environment?'
+                    milestone(1)
+                    kubernetesDeploy(
+                        credentialsType: 'KubeConfig',
+                        kubeConfig: [path: '/var/lib/jenkins/.kube/config'],
+                        configs: 'train-schedule-kube.yml',
+                        enableConfigSubstitution: true
+                    )
+                   }
+                    catch(err){
+                        echo 'Deployment Skipped!!!!!!!!!!!!!!!'
+                    }
+                }
             }
         }
         stage('Rollback') {
