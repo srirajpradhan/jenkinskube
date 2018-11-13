@@ -11,9 +11,18 @@ pipeline {
       )
     }
     stages {
+        stage("foo") {
+            steps {
+                script {
+                    env.CHOICE = input message: 'User input required', ok: 'Release!',
+                            parameters: [choice(name: 'CHOICE', choices: 'Provision\nDeploy\nRollback', description: 'What is the release scope?')]
+                }
+                echo "${env.CHOICE}"
+            }
+        }
         stage('Install Kubernetes') {
           when {
-            expression {params.CHOICE == 'Provision'}
+            expression {env.CHOICE == 'Provision'}
           }
           steps {
            script {
@@ -83,7 +92,7 @@ pipeline {
         }
         stage('Rollback'){
           when {
-            expression{params.CHOICE == 'Rollback'}
+            expression{env.CHOICE == 'Rollback'}
           }
           steps {
             script {
