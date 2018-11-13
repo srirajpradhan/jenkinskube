@@ -5,8 +5,10 @@ pipeline {
     }
     stages {
         stage('Initialize') {
-          script {
-            env.CHOICE = 'Provision'
+          steps {      
+            script {
+                env.CHOICE = 'Provision'
+            }
           }
         }
         stage('Install Kubernetes') {
