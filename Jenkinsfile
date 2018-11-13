@@ -71,5 +71,15 @@ pipeline {
                 )
             }
         }
+        stage('Rollback'){
+          steps {
+            script {
+              sh 'sudo kubectl rollout status deployment test && \
+              sudo kubectl rollout undo deployment test && \
+              echo "Rollback Complete"'
+            }
+            input('Do You Want to Continue?')
+          }
+        }
     }
 }
