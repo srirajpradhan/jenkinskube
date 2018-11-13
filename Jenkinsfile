@@ -59,7 +59,7 @@ pipeline {
         stage('Configure Kubernetes Dashboard') {
             when {
                 expression {
-                    return env.CHOICE == 'Deploy';
+                    return env.CHOICE == 'Provision';
                 }
             }
             steps {
