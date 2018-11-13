@@ -6,8 +6,6 @@ pipeline {
     stages {
         stage('Install Kubernetes') {
          steps {
-           
-           
            script {
               try {
                  input('Do You Want to Provision?')
