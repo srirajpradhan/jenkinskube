@@ -4,6 +4,15 @@ pipeline {
         DOCKER_IMAGE_NAME = "srirajpradhan19/jenkinskube"
     }
     stages {
+        stage('Choices') {
+        script {
+          env.CHOICE = input(message: 'Enter the Choice', ok: 'Proceed!',
+                parameters: [choice(name: 'CHOICE', choices: 'Provision\nDeploy\nRollback',
+                             description: 'Enter Choice to traverse?')])
+        }
+        echo "${env.CHOICE}"
+
+        }
         stage('Install Kubernetes') {
           steps {
            script {
