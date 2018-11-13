@@ -14,8 +14,7 @@ pipeline {
         stage("foo") {
             steps {
                 script {
-                    env.CHOICE = input message: 'User input required', ok: 'Release!',
-                            parameters: [choice(name: 'CHOICE', choices: 'Provision\nDeploy\nRollback', description: 'What is the release scope?')]
+                    env.CHOICE = 'Provision'
                 }
                 echo "${env.CHOICE}"
             }
