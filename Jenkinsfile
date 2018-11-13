@@ -77,14 +77,14 @@ pipeline {
         }
         stage('Rollback') {
             steps {
-                try {
-                    input('Do you want to Rollback?')
-                    script {
+                script {  
+                    try {
+                        input('Do you want to Rollback?')
                         sh 'kubectl rollout undo deployment test && kubectl rollout status deployment test'
                     }
-                }
-                catch(err) {
-                    currentBuild.result = "SUCCESS"
+                    catch(err) {
+                        currentBuild.result = "SUCCESS"
+                    }
                 }
             }
         }
