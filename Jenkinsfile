@@ -24,7 +24,7 @@ pipeline {
           steps {
            script {
             env.SUBNETIP = input(id: 'env.SUBNETIP', message: 'Enter Subent IP', parameters: [[$class: 'TextParameterDefinition', defaultValue: 'latest', description: 'Environment', name: 'env']])
-            sh 'sudo apt update &&\
+            sh "sudo apt update &&\
                 sudo apt install -y apt-transport-https ca-certificates curl software-properties-common &&\
                  sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add - &&\
                  sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" &&\
@@ -38,7 +38,7 @@ pipeline {
                  sudo systemctl daemon-reload && \
                  sudo systemctl restart kubelet && \
                  sudo swapoff -a &&\
-                 sudo kubeadm init --pod-network-cidr="${env.SUBNETIP}" && \
+                 sudo kubeadm init --pod-network-cidr=${env.SUBNETIP} && \
                  sudo mkdir -p /home/ubuntu/.kube && \
                  sudo cp -i /etc/kubernetes/admin.conf /home/ubuntu/.kube/config && \
                  sudo chown $(id -u):$(id -g) /home/ubuntu/.kube/config && \
@@ -52,7 +52,7 @@ pipeline {
                  sudo kubectl apply -f https://docs.projectcalico.org/v3.1/getting-started/kubernetes/installation/hosted/rbac-kdd.yaml && \
                  sudo kubectl apply -f https://docs.projectcalico.org/v3.1/getting-started/kubernetes/installation/hosted/kubernetes-datastore/calico-networking/1.7/calico.yaml && \
                  sudo kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/master/src/deploy/alternative/kubernetes-dashboard.yaml && \
-                 sudo kubectl create clusterrolebinding add-on-cluster-admin --clusterrole=cluster-admin --serviceaccount=kube-system:kubernetes-dashboard'
+                 sudo kubectl create clusterrolebinding add-on-cluster-admin --clusterrole=cluster-admin --serviceaccount=kube-system:kubernetes-dashboard"
                  env.ALLOW = true
                  input('Continue after Configuring Kubernetes Dashboard using -> sudo kubectl -n kube-system edit service kubernetes-dashboard?')
            }
