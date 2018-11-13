@@ -57,9 +57,10 @@ pipeline {
                         app.inside {
                             sh 'echo Hello, World!'
                         }
+                        env.flag = 'true'
                     }
                     catch(err) {
-                        env.flag = 'true'
+                        env.flag = 'false'
                     }
                 }
             }
@@ -78,7 +79,7 @@ pipeline {
         stage('DeployToProduction') {
             steps {
                 script {
-                   if(env.flag == 'deploy'){   
+                   if(env.flag == 'true'){   
                     milestone(1)
                     kubernetesDeploy(
                         credentialsType: 'KubeConfig',
