@@ -53,10 +53,22 @@ pipeline {
                  sudo kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/master/src/deploy/alternative/kubernetes-dashboard.yaml && \
                  sudo kubectl create clusterrolebinding add-on-cluster-admin --clusterrole=cluster-admin --serviceaccount=kube-system:kubernetes-dashboard'
            }
-           echo 'Ayo!!!!!!!!!!!!!!!!!!!!!!!'
-           input('Configure Kubernetes Dashboard?')
          }
         }
+        
+        stage('Configure Kubernetes Dashboard') {
+            when {
+                expression {
+                    return env.CHOICE == 'Deploy';
+                }
+            }
+            steps {
+               echo 'Ayo!!!!!!!!!!!!!!!!!!!!!!!'
+               input('Configure Kubernetes Dashboard?')
+               env.ALLOW = true
+            }
+        }
+        
         stage('Build Docker Image') {
             when {
               expression {
