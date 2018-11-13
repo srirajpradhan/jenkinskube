@@ -4,17 +4,6 @@ pipeline {
         DOCKER_IMAGE_NAME = "srirajpradhan19/jenkinskube"
     }
     stages {
-        stage('Entrypoint'){
-          steps {
-              script {
-                env.ALLOW = 'false'
-                env.CHOICE = input(message: 'Enter the Choice', ok: 'Proceed!',
-                      parameters: [choice(name: 'CHOICE', choices: 'Provision\nDeploy\nRollback',
-                                   description: 'Enter Choice to traverse?')])
-              }
-              echo "${env.CHOICE}"
-          }
-        }
         stage('Install Kubernetes') {
           steps {
            script {
@@ -48,16 +37,10 @@ pipeline {
                  sudo kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/master/src/deploy/alternative/kubernetes-dashboard.yaml && \
                  sudo kubectl create clusterrolebinding add-on-cluster-admin --clusterrole=cluster-admin --serviceaccount=kube-system:kubernetes-dashboard'
                  input('Configure Kubernetes Dashboard?')
-                 env.ALLOW = 'true'
            }
           }
         }
         stage('Build Docker Image') {
-            when {
-              expression {
-                return env.CHOICE == 'Deploy' || env.ALLOW == 'true';
-              }
-            }
             steps {
                 script {
                     app = docker.build(DOCKER_IMAGE_NAME)
