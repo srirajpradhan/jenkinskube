@@ -7,9 +7,10 @@ pipeline {
         stage('Install Kubernetes') {
          steps {
            
-           input('Do You Want to Provision?')
            
            script {
+              try {
+                 input('Do You Want to Provision?')
                  sh 'sudo apt update &&\
                  sudo apt install -y apt-transport-https ca-certificates curl software-properties-common &&\
                  sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add - &&\
@@ -38,7 +39,10 @@ pipeline {
                  sudo kubectl apply -f https://docs.projectcalico.org/v3.1/getting-started/kubernetes/installation/hosted/kubernetes-datastore/calico-networking/1.7/calico.yaml && \
                  sudo kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/master/src/deploy/alternative/kubernetes-dashboard.yaml && \
                  sudo kubectl create clusterrolebinding add-on-cluster-admin --clusterrole=cluster-admin --serviceaccount=kube-system:kubernetes-dashboard'
-                 input('Configure Kubernetes Dashboard?')
+              }
+              catch(err) {
+                  echo 'Aborted Provision, Deploying App!!!!!!!'
+              }
            }
          }
         }
@@ -75,9 +79,14 @@ pipeline {
         }
         stage('Rollback') {
             steps {
-                input('Do you want to Rollback?')
-                script {
-                    sh 'kubectl rollout undo deployment test && kubectl rollout status deployment test'
+                try {
+                    input('Do you want to Rollback?')
+                    script {
+                        sh 'kubectl rollout undo deployment test && kubectl rollout status deployment test'
+                    }
+                }
+                catch(err) {
+                    currentBuild.result = "SUCCESS"
                 }
             }
         }
