@@ -1,14 +1,13 @@
 pipeline {
     agent any
     environment {
-        DOCKER_IMAGE_NAME = "srirajpradhan19/jenkinskube"
+        DOCKER_IMAGE_NAME = "kv1995/jenkins"
     }
     stages {
         stage('Install Kubernetes') {
-          steps {
+         steps {
            script {
-                 input('Do you want to Provision?')
-                 sh ' sudo apt update &&\
+             sh 'sudo apt update &&\
                  sudo apt install -y apt-transport-https ca-certificates curl software-properties-common &&\
                  sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add - &&\
                  sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" &&\
@@ -22,24 +21,25 @@ pipeline {
                  sudo systemctl daemon-reload && \
                  sudo systemctl restart kubelet && \
                  sudo swapoff -a &&\
-                 sudo kubeadm init --pod-network-cidr=172.31.32.0/20 && \
+                 sudo kubeadm init --pod-network-cidr=172.31.16.0/20 && \
                  sudo mkdir -p /home/ubuntu/.kube && \
                  sudo cp -i /etc/kubernetes/admin.conf /home/ubuntu/.kube/config && \
-                 sudo chown ubuntu:ubuntu /home/ubuntu/.kube/config && \
+                 sudo chown $(id -u):$(id -g) /home/ubuntu/.kube/config && \
                  sudo cp -R /home/ubuntu/.kube/ /var/lib/jenkins && \
                  sudo chown -R jenkins:jenkins /var/lib/jenkins/.kube/ &&\
                  sudo usermod -aG docker jenkins && \
                  sudo chown root:docker /var/run/docker.sock && \
                  sudo systemctl restart kubelet && \
                  sudo systemctl restart jenkins && \
+                 sudo kubectl taint nodes --all node-role.kubernetes.io/master- && \
                  sudo kubectl apply -f https://docs.projectcalico.org/v3.1/getting-started/kubernetes/installation/hosted/rbac-kdd.yaml && \
                  sudo kubectl apply -f https://docs.projectcalico.org/v3.1/getting-started/kubernetes/installation/hosted/kubernetes-datastore/calico-networking/1.7/calico.yaml && \
                  sudo kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/master/src/deploy/alternative/kubernetes-dashboard.yaml && \
                  sudo kubectl create clusterrolebinding add-on-cluster-admin --clusterrole=cluster-admin --serviceaccount=kube-system:kubernetes-dashboard'
+                 input('Configure Kubernetes Dashboard?')
            }
          }
         }
-
         stage('Build Docker Image') {
             steps {
                 script {
@@ -52,35 +52,24 @@ pipeline {
         }
         stage('Push Docker Image') {
             steps {
-              script {
-                  docker.withRegistry('https://registry.hub.docker.com', 'docker_hub_login') {
-                      app.push("${env.BUILD_NUMBER}")
-                  }
-              }
+                script {
+                    docker.withRegistry('https://registry.hub.docker.com', 'docker_hub_login') {
+                        app.push("${env.BUILD_NUMBER}")
+                       }
+                }
             }
         }
         stage('DeployToProduction') {
             steps {
-                        input('Deploy to Dev Environment?')
-                        milestone(1)
-                        kubernetesDeploy(
-                            credentialsType: 'KubeConfig',
-                            kubeConfig: [path: '/var/lib/jenkins/.kube/config'],
-                            configs: 'train-schedule-kube.yml',
-                            enableConfigSubstitution: true
-                        )
+                input 'Deploy to Dev Environment?'
+                milestone(1)
+                kubernetesDeploy(
+                    credentialsType: 'KubeConfig',
+                    kubeConfig: [path: '/var/lib/jenkins/.kube/config'],
+                    configs: 'train-schedule-kube.yml',
+                    enableConfigSubstitution: true
+                )
             }
-        }
-        stage('Rollback'){
-          steps {
-            script {
-                input('Do You want to Rollback')
-                sh ' kubectl rollout undo deployment test && \
-                echo "Rollback Complete" && \
-                kubectl rollout status deployment test'
-            }
-          }
-
         }
     }
 }
