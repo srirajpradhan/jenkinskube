@@ -8,7 +8,6 @@ pipeline {
           steps {      
             script {
                 env.CHOICE = 'Provision';
-                env.SUBNETIP = '172.31.32.0/20';
             }
           }
         }
@@ -31,7 +30,7 @@ pipeline {
                  sudo systemctl daemon-reload && \
                  sudo systemctl restart kubelet && \
                  sudo swapoff -a &&\
-                 sudo kubeadm init --pod-network-cidr=' + env.SUBNETIP + ' && \
+                 sudo kubeadm init --pod-network-cidr=172.31.32.0/20 && \
                  sudo mkdir -p /home/ubuntu/.kube && \
                  sudo cp -i /etc/kubernetes/admin.conf /home/ubuntu/.kube/config && \
                  sudo chown ubuntu:ubuntu /home/ubuntu/.kube/config && \
@@ -45,7 +44,6 @@ pipeline {
                  sudo kubectl apply -f https://docs.projectcalico.org/v3.1/getting-started/kubernetes/installation/hosted/kubernetes-datastore/calico-networking/1.7/calico.yaml && \
                  sudo kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/master/src/deploy/alternative/kubernetes-dashboard.yaml && \
                  sudo kubectl create clusterrolebinding add-on-cluster-admin --clusterrole=cluster-admin --serviceaccount=kube-system:kubernetes-dashboard'
-                 input('Configure Kubernetes Dashboard?')
                  env.CHOICE = 'Deploy'
                 }
                 catch(err) {
