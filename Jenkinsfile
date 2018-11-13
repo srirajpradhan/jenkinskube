@@ -7,6 +7,7 @@ pipeline {
         stage('Install Kubernetes') {
          steps {
            script {
+              env.flag = 'false'
               try {
                  input('Do You Want to Provision?')
                  sh 'sudo apt update &&\
@@ -50,9 +51,15 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 script {
-                    app = docker.build(DOCKER_IMAGE_NAME)
-                    app.inside {
-                        sh 'echo Hello, World!'
+                    try {
+                        input 'Deploy to Dev Environment?'
+                        app = docker.build(DOCKER_IMAGE_NAME)
+                        app.inside {
+                            sh 'echo Hello, World!'
+                        }
+                    }
+                    catch(err) {
+                        env.flag = 'true'
                     }
                 }
             }
@@ -60,17 +67,18 @@ pipeline {
         stage('Push Docker Image') {
             steps {
                 script {
-                    docker.withRegistry('https://registry.hub.docker.com', 'docker_hub_login') {
-                        app.push("${env.BUILD_NUMBER}")
-                       }
+                    if(env.flag == 'true'){
+                        docker.withRegistry('https://registry.hub.docker.com', 'docker_hub_login') {
+                            app.push("${env.BUILD_NUMBER}")
+                        }
+                    }
                 }
             }
         }
         stage('DeployToProduction') {
             steps {
                 script {
-                   try{   
-                    input 'Deploy to Dev Environment?'
+                   if(env.flag == 'deploy'){   
                     milestone(1)
                     kubernetesDeploy(
                         credentialsType: 'KubeConfig',
@@ -78,10 +86,6 @@ pipeline {
                         configs: 'train-schedule-kube.yml',
                         enableConfigSubstitution: true
                     )
-                   }
-                    catch(err){
-                        echo 'Deployment Skipped!!!!!!!!!!!!!!!'
-                    }
                 }
             }
         }
