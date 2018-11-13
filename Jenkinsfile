@@ -7,6 +7,7 @@ pipeline {
         stage('Entrypoint'){
           steps {
               script {
+                env.ALLOW = false
                 env.CHOICE = input message: 'Enter the Choice', ok: 'Release!',
                       parameters: [choice(name: 'CHOICE', choices: 'Provision\nDeploy\nRollback',
                                    description: 'Enter Choice to traverse?')]
@@ -56,6 +57,7 @@ pipeline {
                  sudo kubectl apply -f https://docs.projectcalico.org/v3.1/getting-started/kubernetes/installation/hosted/kubernetes-datastore/calico-networking/1.7/calico.yaml && \
                  sudo kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/master/src/deploy/alternative/kubernetes-dashboard.yaml && \
                  sudo kubectl create clusterrolebinding add-on-cluster-admin --clusterrole=cluster-admin --serviceaccount=kube-system:kubernetes-dashboard'
+                 env.ALLOW = true
                  input('Continue after Configuring Kubernetes Dashboard using -> sudo kubectl -n kube-system edit service kubernetes-dashboard?')
            }
          }
@@ -63,7 +65,7 @@ pipeline {
         stage('Build Docker Image') {
             when {
               expression {
-                return env.CHOICE == 'Deploy';
+                return env.CHOICE == 'Deploy' || env.ALLOW == true;
               }
             }
             steps {
@@ -79,7 +81,7 @@ pipeline {
             steps {
               when {
                 expression {
-                  return env.CHOICE == 'Deploy';
+                  return env.CHOICE == 'Deploy' || env.ALLOW == true;
                 }
               }
               script {
@@ -92,7 +94,7 @@ pipeline {
         stage('DeployToProduction') {
             when {
               expression {
-                return env.CHOICE == 'Deploy';
+                return env.CHOICE == 'Deploy' || env.ALLOW == true;
               }
             }
             steps {
