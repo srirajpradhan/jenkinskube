@@ -49,7 +49,7 @@ pipeline {
         stage('Build Docker Image') {
             when {
               expression {
-                return env.CHOICE == 'Deploy'
+                env.CHOICE == 'Deploy'
               }
             }
             steps {
@@ -64,7 +64,7 @@ pipeline {
         stage('Push Docker Image') {
              when {
                 expression {
-                  return env.CHOICE == 'Deploy'
+                  env.CHOICE == 'Deploy'
                 }
              }
             steps {
@@ -78,7 +78,7 @@ pipeline {
         stage('DeployToProduction') {
             when {
               expression {
-                return env.CHOICE == 'Deploy'
+                env.CHOICE == 'Deploy'
               }
             }
             steps {
