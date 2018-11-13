@@ -3,18 +3,18 @@ pipeline {
     environment {
         DOCKER_IMAGE_NAME = "srirajpradhan19/jenkinskube"
     }
+    parameters {
+      choice(
+        choices: ['Provision', 'Deploy', 'Rollback'],
+        description: 'Choice?',
+        name: CHOICE
+      )
+    }
     stages {
-        stage('Choices') {
-          steps {
-            script {
-              env.CHOICE = input(message: 'Enter the Choice', ok: 'Proceed!',
-                    parameters: [choice(name: 'CHOICE', choices: 'Provision\nDeploy\nRollback',
-                                 description: 'Enter Choice to traverse?')])
-            }
-            echo "${env.CHOICE}"
-          }
-        }
         stage('Install Kubernetes') {
+          when {
+            expression {params.CHOICE == 'Provision'}
+          }
           steps {
            script {
              sh 'sudo apt update &&\
@@ -82,6 +82,9 @@ pipeline {
             }
         }
         stage('Rollback'){
+          when {
+            expression{params.CHOICE == 'Rollback'}
+          }
           steps {
             script {
               sh 'sudo kubectl rollout status deployment test && \

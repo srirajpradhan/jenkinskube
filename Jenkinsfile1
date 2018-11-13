@@ -3,22 +3,16 @@ pipeline {
     environment {
         DOCKER_IMAGE_NAME = "srirajpradhan19/jenkinskube"
     }
+    parameters {
+      choice(
+        choices: ['Provision', 'Deploy', 'Rollback'],
+        description: 'Choice',
+        name: 'CHOICE')
+    }
     stages {
-        stage('Entrypoint'){
-          steps {
-              script {
-                env.CHOICE = input(message: 'Enter the Choice', ok: 'Proceed!',
-                      parameters: [choice(name: 'CHOICE', choices: 'Provision\nDeploy\nRollback',
-                                   description: 'Enter Choice to traverse?')])
-              }
-              echo "${env.CHOICE}"
-          }
-        }
         stage('Install Kubernetes') {
           when {
-            expression {
-              return env.CHOICE == 'Provision';
-            }
+            expression {params.CHOICE == 'Provision';}
           }
           steps {
            script {
@@ -55,11 +49,11 @@ pipeline {
            }
          }
         }
-   
+
         stage('Build Docker Image') {
             when {
               expression {
-                return env.CHOICE == 'Deploy' || env.ALLOW == 'true';
+                params.CHOICE == 'Deploy' || env.ALLOW == 'true';
               }
             }
             steps {
